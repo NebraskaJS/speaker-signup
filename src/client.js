@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-boost';
 
-export const client = new ApolloClient({
+export const CLIENT_OPTIONS = {
   uri: 'https://api.github.com/graphql',
   request(operation) {
     return new Promise(resolve => {
@@ -13,4 +13,6 @@ export const client = new ApolloClient({
       resolve();
     });
   },
-});
+};
+
+export const client = new ApolloClient(CLIENT_OPTIONS);

@@ -1,29 +1,51 @@
 import React from 'react';
-import gql from 'graphql-tag';
+import styled from 'react-emotion';
+import Link from 'gatsby-link';
+
+const Container = styled.div`
+  margin: 6px;
+`;
+
+const Title = styled.h3`
+  margin: 0.5rem 0;
+  font-weight: 900;
+  text-transform: uppercase;
+`;
 
 export function Issue({ author, bodyHTML, title, url }) {
   return (
-    <div>
-      <a href={url} target="_blank" rel="noopener">
-        {title} by {author.login}
-      </a>
-      <div dangerouslySetInnerHTML={{ __html: bodyHTML }} />
-    </div>
+    <Container>
+      <Link
+        to={url}
+        target="_blank"
+        rel="noopener"
+        css={{
+          color: 'inherit',
+          textDecoration: 'underline',
+          textDecorationSkip: 'ink',
+        }}
+      >
+        <Title>{title}</Title>
+      </Link>
+      <div
+        css={{ fontFamily: 'Lato, sans-serif' }}
+        dangerouslySetInnerHTML={{ __html: bodyHTML }}
+      />
+    </Container>
   );
 }
 
-Issue.fragments = {
-  issue: gql`
-    fragment IssueFragment on Issue {
-      id
-      author {
-        avatarUrl
-        login
-        url
-      }
-      bodyHTML
-      title
+export const issueFragment = graphql`
+  fragment IssueFragment on GithubIssues {
+    id
+    author {
+      avatarUrl
+      login
       url
     }
-  `,
-};
+    bodyHTML
+    title
+    url
+    createdAt
+  }
+`;

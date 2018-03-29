@@ -3,6 +3,19 @@ import Link from 'gatsby-link';
 
 import { Issues } from '../components';
 
-const IndexPage = () => <Issues />;
+export default function IndexPage({ data }) {
+  const { issues } = data;
+  return <Issues list={issues.edges} />;
+}
 
-export default IndexPage;
+export const indexQuery = graphql`
+  query IndexPageQuery {
+    issues: allGithubIssues(sort: { fields: [createdAt], order: DESC }) {
+      edges {
+        node {
+          ...IssueFragment
+        }
+      }
+    }
+  }
+`;

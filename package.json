@@ -6,16 +6,26 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "apollo-boost": "~0.1.4",
+    "apollo-cache-inmemory": "~1.1.12",
+    "apollo-link-http": "~1.5.3",
+    "emotion": "~9.1.0",
+    "emotion-server": "~9.1.0",
     "gatsby": "^1.9.241",
     "gatsby-link": "^1.6.39",
+    "gatsby-plugin-emotion": "~1.1.16",
     "gatsby-plugin-react-helmet": "^2.0.8",
     "gatsby-plugin-react-next": "~1.0.11",
+    "gatsby-plugin-typography": "~1.7.18",
     "graphql": "0.11.7",
     "graphql-tag": "~2.8.0",
+    "node-fetch": "~2.1.2",
+    "normalize.css": "~8.0.0",
     "react": "~16.2.0",
     "react-apollo": "~2.1.1",
     "react-dom": "~16.2.0",
-    "react-helmet": "^5.2.0"
+    "react-emotion": "~9.1.0",
+    "react-helmet": "^5.2.0",
+    "typography": "~0.16.6"
   },
   "keywords": ["gatsby"],
   "license": "MIT",
@@ -28,6 +38,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@dschau/gatsby-source-github": "~0.0.1",
+    "dotenv": "~5.0.1",
     "husky": "~0.14.3",
     "prettier": "~1.11.1",
     "pretty-quick": "~1.4.1"
