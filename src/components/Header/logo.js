@@ -26,6 +26,7 @@ const Title = styled.h1`
   font-weight: 900;
   font-family: Lato, sans-serif;
   text-transform: uppercase;
+  color: black;
 
   @media only screen and (min-width: 768px) {
     font-size: 32px;
@@ -34,7 +35,11 @@ const Title = styled.h1`
 
 export function Logo({ children, to = '/', ...rest }) {
   return (
-    <Link to={to} css={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link
+      to={to}
+      activeClassName="active"
+      css={{ textDecoration: 'none', color: 'inherit' }}
+    >
       <Container {...rest}>{children({ Title })}</Container>
     </Link>
   );

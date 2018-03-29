@@ -3,37 +3,7 @@ import { Query } from 'react-apollo';
 import styled from 'react-emotion';
 import gql from 'graphql-tag';
 
-import { Issue } from '..';
-
-const Container = styled.section`
-  border-radius: 6px;
-  border: 6px solid black;
-  padding: 6px; /* 6 6 6 */
-  margin: 6px;
-  position: relative;
-  background-color: white;
-
-  ::before {
-    content: '';
-    background: #fcf01a;
-    width: 80%;
-    height: 80%;
-    bottom: -7%;
-    max-width: 700px;
-    position: absolute;
-    left: -13%;
-    z-index: -1;
-  }
-`;
-
-const Title = styled.h2`
-  font-weight: 900;
-  font-size: 32px;
-  text-align: center;
-  text-transform: uppercase;
-
-  margin: 1rem 0;
-`;
+import { Block, Issue } from '..';
 
 const Grid = styled.div`
   display: grid;
@@ -48,10 +18,12 @@ const Grid = styled.div`
 
 export function Issues({ list }) {
   return (
-    <Container>
-      <Title>Open Proposals</Title>
-      <Grid>{list.map(({ node }) => <Issue key={node.id} {...node} />)}</Grid>
-    </Container>
+    <Block
+      title="Open Proposals"
+      children={() => (
+        <Grid>{list.map(({ node }) => <Issue key={node.id} {...node} />)}</Grid>
+      )}
+    />
   );
 }
 

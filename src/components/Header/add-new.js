@@ -6,11 +6,12 @@ const StyledLogo = styled(Logo)`
   background-color: white;
   padding: 0.5rem;
 
-  :hover {
+  :hover,
+  .active & {
     background-color: black;
 
     .title {
-      color: white;
+      color: #fcf01a;
     }
   }
 
@@ -22,7 +23,7 @@ const StyledLogo = styled(Logo)`
 export function AddNew() {
   return (
     <StyledLogo
-      to="/new"
+      to="/add"
       children={({ Title }) => <Title className="title">Add proposal</Title>}
     />
   );

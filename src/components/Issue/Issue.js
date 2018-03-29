@@ -3,7 +3,9 @@ import styled from 'react-emotion';
 import Link from 'gatsby-link';
 
 const Container = styled.div`
-  margin: 6px;
+  @media only screen and (min-width: 768px) {
+    margin: 1rem;
+  }
 `;
 
 const Title = styled.h3`
@@ -12,13 +14,11 @@ const Title = styled.h3`
   text-transform: uppercase;
 `;
 
-export function Issue({ author, bodyHTML, title, url }) {
+export function Issue({ author, bodyHTML, fields, title, url }) {
   return (
     <Container>
       <Link
-        to={url}
-        target="_blank"
-        rel="noopener"
+        to={fields.slug}
         css={{
           color: 'inherit',
           textDecoration: 'underline',
@@ -42,6 +42,9 @@ export const issueFragment = graphql`
       avatarUrl
       login
       url
+    }
+    fields {
+      slug
     }
     bodyHTML
     title
