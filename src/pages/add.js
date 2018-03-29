@@ -87,6 +87,10 @@ export default class NewProposal extends Component {
     autosize(this.textarea);
   }
 
+  componentWillUnmount() {
+    autosize.destroy(this.textarea);
+  }
+
   render() {
     return (
       <StyledBlock
