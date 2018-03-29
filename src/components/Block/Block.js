@@ -28,7 +28,6 @@ const TitleContainer = styled.div`
 
 const Title = styled.h2`
   display: inline-block;
-  font-weight: 900;
   font-size: 32px;
   text-transform: uppercase;
   color: black;

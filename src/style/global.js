@@ -1,6 +1,12 @@
 import { injectGlobal } from 'emotion';
 
 injectGlobal`
-  body {
+  a {
+    color: black;
+    text-decoration-skip: ink;
+  }
+
+  a:hover {
+    text-decoration: none;
   }
 `;

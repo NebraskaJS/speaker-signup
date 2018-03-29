@@ -2,16 +2,18 @@ import React from 'react';
 
 import { Issues } from '../components';
 
-export default function IndexPage({ data }) {
+export default function Closed({ data }) {
   const { proposals } = data;
-  return <Issues list={proposals.edges} />;
+  return (
+    <Issues list={proposals.edges} title="Closed proposals" closedProposals />
+  );
 }
 
-export const indexQuery = graphql`
-  query IndexPageQuery {
+export const closedQuery = graphql`
+  query ClosedPageQuery {
     proposals: allGithubIssues(
       sort: { fields: [createdAt], order: DESC }
-      filter: { state: { ne: "CLOSED" } }
+      filter: { state: { eq: "CLOSED" } }
     ) {
       edges {
         node {

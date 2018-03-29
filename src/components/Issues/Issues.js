@@ -1,7 +1,6 @@
 import React from 'react';
-import { Query } from 'react-apollo';
 import styled from 'react-emotion';
-import gql from 'graphql-tag';
+import GatsbyLink from 'gatsby-link';
 
 import { Block, Issue } from '..';
 
@@ -16,12 +15,29 @@ const Grid = styled.div`
   }
 `;
 
-export function Issues({ list }) {
+const Link = styled(GatsbyLink)`
+  display: block;
+  color: #aaa;
+  font-size: 14px;
+  text-align: center;
+  padding: 0.5rem 0;
+`;
+
+export function Issues({ list, title = 'Open proposals' }) {
   return (
     <Block
-      title="Open Proposals"
+      title={title}
       children={() => (
-        <Grid>{list.map(({ node }) => <Issue key={node.id} {...node} />)}</Grid>
+        <React.Fragment>
+          <Grid>
+            {list.map(({ node }) => <Issue key={node.id} {...node} />)}
+          </Grid>
+          {title.indexOf('Open') > -1 ? (
+            <Link to="/closed">Check out closed proposals</Link>
+          ) : (
+            <Link to="/">Check out open proposals</Link>
+          )}
+        </React.Fragment>
       )}
     />
   );

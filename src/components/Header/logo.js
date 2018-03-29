@@ -23,8 +23,6 @@ const Container = styled.div`
 const Title = styled.h1`
   margin: 0;
   font-size: 18px;
-  font-weight: 900;
-  font-family: Lato, sans-serif;
   text-transform: uppercase;
   color: black;
 

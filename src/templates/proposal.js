@@ -10,7 +10,6 @@ const Container = styled.main`
 const Title = styled.h1`
   color: black;
   font-size: 32px;
-  font-weight: 900;
   text-transform: uppercase;
 
   margin: 1rem 0;
@@ -25,7 +24,6 @@ const Title = styled.h1`
 const Author = styled.h2`
   color: #666;
   font-size: 20px;
-  font-weight: 900;
   text-transform: uppercase;
   margin: 0;
   margin-bottom: 0.5rem;

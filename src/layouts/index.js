@@ -5,14 +5,20 @@ import { Header } from '../components';
 import '../style/global';
 import 'normalize.css';
 
-export default function IndexLayout({ children }) {
+export default function IndexLayout({ children, data }) {
+  const { meta } = data;
+  const { description, keywords, title } = meta;
   return (
     <div>
       <Helmet
-        title="Gatsby Default Starter"
+        title="Proposals"
+        titleTemplate={`%s | ${title}`}
         meta={[
-          { name: 'description', content: 'Sample' },
-          { name: 'keywords', content: 'sample, something' },
+          { name: 'description', content: meta.description },
+          { name: 'keywords', content: keywords.join(', ') },
+          { name: 'twitter:site', content: '@nebraskajs' },
+          { name: 'og:type', content: 'website' },
+          { name: 'og:site_name', content: title },
         ]}
       />
       <Header />
@@ -29,3 +35,13 @@ export default function IndexLayout({ children }) {
     </div>
   );
 }
+
+export const indexQuery = graphql`
+  query IndexLayoutQuery {
+    meta: contentYaml {
+      description
+      keywords
+      title
+    }
+  }
+`;

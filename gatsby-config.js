@@ -10,12 +10,20 @@ module.exports = {
     'gatsby-plugin-emotion',
     'gatsby-plugin-sharp',
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'metaContent',
+        path: `${__dirname}/content`,
+      },
+    },
+    {
       resolve: 'gatsby-plugin-typography',
       options: {
         pathToConfigModule: 'src/util/typography.js',
       },
     },
     'gatsby-transformer-sharp',
+    'gatsby-transformer-yaml',
     {
       resolve: '@dschau/gatsby-source-github',
       options: {
@@ -25,7 +33,7 @@ module.exports = {
         queries: [
           `{
             repository(owner: "nebraskajs", name: "speaker-signup") {
-              issues(last: 20, states: OPEN) {
+              issues(last: 50) {
                 edges {
                   node {
                     id
@@ -35,6 +43,7 @@ module.exports = {
                       url
                     }
                     bodyHTML
+                    state
                     title
                     url
                     createdAt

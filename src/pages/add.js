@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
+import Helmet from 'react-helmet';
 import autosize from 'autosize';
 
 import { Block } from '../components';
@@ -47,9 +48,7 @@ const Button = styled.button`
   border-radius: 6px;
   width: 100%;
   padding: 1rem 0.5rem;
-  font-family: Lato, sans-serif;
   font-size: 24px;
-  font-weight: 900;
   text-transform: uppercase;
   cursor: pointer;
 
@@ -93,35 +92,46 @@ export default class NewProposal extends Component {
 
   render() {
     return (
-      <StyledBlock
-        title="Add a proposal"
-        children={() => (
-          <Form name="add-proposal" onSubmit={handleSubmit}>
-            <Label for="title">
-              <Input name="title" id="title" placeholder="Title" required />
-            </Label>
-            <Label for="comment">
-              <Textarea
-                id="comment"
-                placeholder="Leave a comment"
-                innerRef={node => (this.textarea = node)}
-                required
-              />
-              <small
-                css={{
-                  color: '#aaa',
-                  display: 'block',
-                  fontFamily: 'sans-serif',
-                  padding: '0.25rem 0',
-                }}
-              >
-                Note: markdown is supported
-              </small>
-            </Label>
-            <Button>Send it</Button>
-          </Form>
-        )}
-      />
+      <React.Fragment>
+        <Helmet
+          title="Add a proposal"
+          meta={[
+            {
+              name: 'description',
+              content: `NebraskaJS needs speakers! Use this form to submit a proposal and hopefully everyone will hear your excellent talk soon.`,
+            },
+          ]}
+        />
+        <StyledBlock
+          title="Add a proposal"
+          children={() => (
+            <Form name="add-proposal" onSubmit={handleSubmit}>
+              <Label for="title">
+                <Input name="title" id="title" placeholder="Title" required />
+              </Label>
+              <Label for="comment">
+                <Textarea
+                  id="comment"
+                  placeholder="Leave a comment"
+                  innerRef={node => (this.textarea = node)}
+                  required
+                />
+                <small
+                  css={{
+                    color: '#aaa',
+                    display: 'block',
+                    fontFamily: 'sans-serif',
+                    padding: '0.25rem 0',
+                  }}
+                >
+                  Note: markdown is supported
+                </small>
+              </Label>
+              <Button>Send it</Button>
+            </Form>
+          )}
+        />
+      </React.Fragment>
     );
   }
 }
