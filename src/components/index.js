@@ -1,3 +1,4 @@
+export * from './AuthenticationProvider';
 export * from './Block';
 export * from './Emoji';
 export * from './Header';

@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 import Helmet from 'react-helmet';
 import autosize from 'autosize';
 
-import { Block } from '../components';
+import { Authentication, Block } from '../components';
 
 const Form = styled.form`
   padding: 1rem;
@@ -77,10 +77,6 @@ const StyledBlock = styled(Block)`
   }
 `;
 
-const handleSubmit = ev => {
-  ev.preventDefault();
-};
-
 export default class NewProposal extends Component {
   componentDidMount() {
     autosize(this.textarea);
@@ -90,48 +86,71 @@ export default class NewProposal extends Component {
     autosize.destroy(this.textarea);
   }
 
+  handleSubmit = ({ authenticate, authenticated, token }) => {
+    return ev => {
+      ev.preventDefault();
+      if (!authenticated) {
+        const shouldAuthenticate = confirm(
+          `You need to authenticate for that. Sound good?`
+        );
+        if (shouldAuthenticate) {
+          authenticate();
+        }
+      }
+    };
+  };
+
   render() {
     return (
-      <React.Fragment>
-        <Helmet
-          title="Add a proposal"
-          meta={[
-            {
-              name: 'description',
-              content: `NebraskaJS needs speakers! Use this form to submit a proposal and hopefully everyone will hear your excellent talk soon.`,
-            },
-          ]}
-        />
-        <StyledBlock
-          title="Add a proposal"
-          children={() => (
-            <Form name="add-proposal" onSubmit={handleSubmit}>
-              <Label for="title">
-                <Input name="title" id="title" placeholder="Title" required />
-              </Label>
-              <Label for="comment">
-                <Textarea
-                  id="comment"
-                  placeholder="Leave a comment"
-                  innerRef={node => (this.textarea = node)}
-                  required
-                />
-                <small
-                  css={{
-                    color: '#aaa',
-                    display: 'block',
-                    fontFamily: 'sans-serif',
-                    padding: '0.25rem 0',
-                  }}
-                >
-                  Note: markdown is supported
-                </small>
-              </Label>
-              <Button>Send it</Button>
-            </Form>
-          )}
-        />
-      </React.Fragment>
+      <Authentication>
+        {auth => (
+          <React.Fragment>
+            <Helmet
+              title="Add a proposal"
+              meta={[
+                {
+                  name: 'description',
+                  content: `NebraskaJS needs speakers! Use this form to submit a proposal and hopefully everyone will hear your excellent talk soon.`,
+                },
+              ]}
+            />
+            <StyledBlock
+              title="Add a proposal"
+              children={() => (
+                <Form name="add-proposal" onSubmit={this.handleSubmit(auth)}>
+                  <Label for="title">
+                    <Input
+                      name="title"
+                      id="title"
+                      placeholder="Title"
+                      required
+                    />
+                  </Label>
+                  <Label for="comment">
+                    <Textarea
+                      id="comment"
+                      placeholder="Leave a comment"
+                      innerRef={node => (this.textarea = node)}
+                      required
+                    />
+                    <small
+                      css={{
+                        color: '#aaa',
+                        display: 'block',
+                        fontFamily: 'sans-serif',
+                        padding: '0.25rem 0',
+                      }}
+                    >
+                      Note: markdown is supported
+                    </small>
+                  </Label>
+                  <Button>Send it</Button>
+                </Form>
+              )}
+            />
+          </React.Fragment>
+        )}
+      </Authentication>
     );
   }
 }

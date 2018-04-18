@@ -3,6 +3,7 @@ import styled from 'react-emotion';
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
 
+import { Authentication } from '..';
 import { Trigger } from './Trigger';
 import { Emoji } from '..';
 
@@ -23,32 +24,56 @@ const ReactionContainer = styled.div({
   display: 'flex',
 });
 
-const Reactions = ({ list }) => (
+const Reactions = ({ list, onReaction }) => (
   <ReactionContainer>
     {list.map(name => (
-      <Emoji ariaLabel="Emoji reaction" key={name} name={name} interactive />
+      <Emoji
+        ariaLabel="Emoji reaction"
+        key={name}
+        name={name}
+        interactive
+        onClick={() => onReaction(name)}
+      />
     ))}
   </ReactionContainer>
 );
 
 export function Reaction({ children, list }) {
   return (
-    <Container>
-      {children}
-      <Tooltip
-        position="bottom"
-        trigger="click"
-        html={<Reactions list={list} />}
-        animation="scale"
-        duration={150}
-        theme="light"
-        interactive
-        arrow
-        arrowSize="big"
-      >
-        <Trigger />
-      </Tooltip>
-    </Container>
+    <Authentication>
+      {({ authenticate, authenticated, token }) => (
+        <Container>
+          {children}
+          <Tooltip
+            position="bottom"
+            trigger="click"
+            html={
+              <Reactions
+                list={list}
+                onReaction={reaction => {
+                  if (!authenticated) {
+                    const shouldAuthenticate = confirm(
+                      'Adding a reaction requires logging in. Log in?'
+                    );
+                    if (shouldAuthenticate) {
+                      authenticate();
+                    }
+                  }
+                }}
+              />
+            }
+            animation="scale"
+            duration={150}
+            theme="light"
+            interactive
+            arrow
+            arrowSize="big"
+          >
+            <Trigger />
+          </Tooltip>
+        </Container>
+      )}
+    </Authentication>
   );
 }
 
