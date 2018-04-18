@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'react-emotion';
 
-const Container = styled.button(
+const EmojiContainer = styled.span(
   {
     fontSize: 24,
     padding: '0.5rem',
@@ -11,14 +11,6 @@ const Container = styled.button(
     outline: 'none',
   },
   ({ interactive, small }) => ({
-    ...(interactive
-      ? {
-          cursor: 'pointer',
-          ':hover': {
-            transform: 'scale(1.2)',
-          },
-        }
-      : {}),
     ...(small
       ? {
           fontSize: 20,
@@ -26,6 +18,13 @@ const Container = styled.button(
       : {}),
   })
 );
+
+const EmojiButton = styled(EmojiContainer)({
+  cursor: 'pointer',
+  ':hover': {
+    transform: 'scale(1.2)',
+  },
+}).withComponent('button');
 
 const EMOJI_MAP = {
   CONFUSED: '😕',
@@ -37,6 +36,7 @@ const EMOJI_MAP = {
 };
 
 export function Emoji({ ariaLabel, className, name, ...rest }) {
+  const Container = rest.interactive ? EmojiButton : EmojiContainer;
   return (
     <Container aria-label={ariaLabel} className={className} {...rest}>
       {EMOJI_MAP[name]}
