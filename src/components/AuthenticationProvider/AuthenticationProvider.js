@@ -70,12 +70,8 @@ export class AuthenticationProvider extends Component {
   getAuthenticationParams = () => {
     const redirectURI = location.href;
     const isLocalHost = redirectURI.includes('localhost');
-    const clientId = isLocalHost
-      ? 'fb701c554c046357a5d8'
-      : '6cd76d335dc3bf8ae896';
-    const clientSecret = isLocalHost
-      ? '254558185a4ae5a5083f2d76f069fd1572ed11fe'
-      : 'a345acffc61ef90ce98b00fc911764e051d9135e';
+    const clientId = process.env.CLIENT_ID;
+    const clientSecret = process.env.CLIENT_SECRET;
     const scope = ['repo'].join(' ');
 
     return {

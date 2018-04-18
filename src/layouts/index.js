@@ -30,9 +30,7 @@ export default function IndexLayout({ children, data }) {
           paddingTop: 0,
         }}
       >
-        <AuthenticationProvider>
-          {children()}
-        </AuthenticationProvider>
+        <AuthenticationProvider>{children()}</AuthenticationProvider>
       </div>
     </div>
   );
