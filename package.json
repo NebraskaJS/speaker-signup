@@ -31,6 +31,7 @@
     "react-dom": "~16.2.0",
     "react-emotion": "~9.1.0",
     "react-helmet": "^5.2.0",
+    "react-tippy": "~1.2.2",
     "typography": "~0.16.6",
     "typography-theme-noriega": "~0.15.10"
   },

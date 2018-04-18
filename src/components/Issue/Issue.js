@@ -2,7 +2,14 @@ import React from 'react';
 import styled from 'react-emotion';
 import Link from 'gatsby-link';
 
+import { ReactionsList } from './ReactionsList';
+import { Reaction } from '..';
+
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   @media only screen and (min-width: 768px) {
     margin: 1rem;
   }
@@ -13,7 +20,7 @@ const Title = styled.h3`
   text-transform: uppercase;
 `;
 
-export function Issue({ author, bodyHTML, fields, title, url }) {
+export function Issue({ author, bodyHTML, fields, reactions, title, url }) {
   return (
     <Container>
       <Link
@@ -30,6 +37,9 @@ export function Issue({ author, bodyHTML, fields, title, url }) {
         css={{ fontFamily: 'Lato, sans-serif' }}
         dangerouslySetInnerHTML={{ __html: bodyHTML }}
       />
+      <Reaction>
+        <ReactionsList list={reactions.edges.map(({ node }) => node.content)} />
+      </Reaction>
     </Container>
   );
 }
@@ -49,5 +59,12 @@ export const issueFragment = graphql`
     title
     url
     createdAt
+    reactions {
+      edges {
+        node {
+          content
+        }
+      }
+    }
   }
 `;

@@ -47,6 +47,13 @@ module.exports = {
                     title
                     url
                     createdAt
+                    reactions(first:10) {
+                      edges {
+                        node {
+                          content
+                        }
+                      }
+                    }
                   }
                 }
               }
