@@ -9,6 +9,7 @@
     "apollo-cache-inmemory": "~1.1.12",
     "apollo-link-http": "~1.5.3",
     "autosize": "~4.0.1",
+    "dom-testing-library": "~1.7.1",
     "emotion": "~9.1.0",
     "emotion-server": "~9.1.0",
     "gatsby": "^1.9.241",
@@ -45,14 +46,16 @@
     "develop": "gatsby develop",
     "format": "prettier --write 'src/**/*.js'",
     "start": "npm run develop",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "devDependencies": {
-    "@dschau/gatsby-source-github": "~0.0.1",
     "dotenv": "~5.0.1",
+    "gatsby-source-github": "~0.0.1",
     "husky": "~0.14.3",
+    "jest": "~22.4.3",
     "limax": "~1.6.0",
     "prettier": "~1.11.1",
-    "pretty-quick": "~1.4.1"
+    "pretty-quick": "~1.4.1",
+    "react-testing-library": "~2.1.1"
   }
 }

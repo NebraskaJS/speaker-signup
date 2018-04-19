@@ -68,7 +68,7 @@ export default function Proposal({ data }) {
       <Author>
         <Link href={author.url}>{author.login}</Link>
       </Author>
-      <Image src={author.avatarUrl} />
+      <Image src={author.avatarUrl} data-test-id="author-avatar" />
       <Description dangerouslySetInnerHTML={{ __html: bodyHTML }} />
     </Container>
   );
