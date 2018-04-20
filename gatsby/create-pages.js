@@ -1,5 +1,4 @@
 const path = require('path');
-const slugify = require('limax');
 
 module.exports = function createPages({ boundActionCreators, graphql }) {
   const { createPage } = boundActionCreators;

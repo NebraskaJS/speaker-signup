@@ -1,4 +1,4 @@
-const slugify = require('limax');
+const slugify = require('slugify');
 
 module.exports = function onCreateNode({ node, boundActionCreators, getNode }) {
   const { createNodeField } = boundActionCreators;
