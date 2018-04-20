@@ -23,7 +23,7 @@ const StyledLogo = styled(Logo)`
 export function AddNew() {
   return (
     <StyledLogo
-      to="/add"
+      to="/new"
       children={({ Title }) => <Title className="title">Add proposal</Title>}
     />
   );

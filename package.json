@@ -1,13 +1,10 @@
 {
   "name": "@nebraskajs/speaker-signup",
-  "description":
-    "A GatsbyJS statically generated frontend to the speaker-signup process for NebraskaJS",
+  "description": "A GatsbyJS statically generated frontend to the speaker-signup process for NebraskaJS",
   "version": "1.0.0",
   "author": "Dustin Schau <dustinschau@gmail.com> (https://dustinschau.com)",
   "dependencies": {
     "apollo-boost": "~0.1.4",
-    "apollo-cache-inmemory": "~1.1.12",
-    "apollo-link-http": "~1.5.3",
     "autosize": "~4.0.1",
     "dom-testing-library": "~1.7.1",
     "emotion": "~9.1.0",
@@ -38,7 +35,9 @@
     "typography": "~0.16.6",
     "typography-theme-noriega": "~0.15.10"
   },
-  "keywords": ["gatsby"],
+  "keywords": [
+    "gatsby"
+  ],
   "license": "MIT",
   "scripts": {
     "precommit": "pretty-quick --staged",
@@ -50,7 +49,7 @@
   },
   "devDependencies": {
     "dotenv": "~5.0.1",
-    "gatsby-source-github": "~0.0.1",
+    "gatsby-source-github": "~0.0.2",
     "husky": "~0.14.3",
     "jest": "~22.4.3",
     "limax": "~1.6.0",

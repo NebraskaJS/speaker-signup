@@ -6,9 +6,9 @@ import { getItem, setItem } from '../../util/local-storage';
 
 const AuthenticationContext = React.createContext('authentication');
 
-export class AuthenticationProvider extends Component {
-  static AUTHENTICATION_KEY = '__SPEAKER_SIGNUP_AUTHENTICATION__';
+export const AUTHENTICATION_KEY = '__SPEAKER_SIGNUP_AUTHENTICATION__';
 
+export class AuthenticationProvider extends Component {
   state = {
     authenticated: false,
     token: '',
@@ -52,13 +52,13 @@ export class AuthenticationProvider extends Component {
                 token: access_token,
               },
               () => {
-                setItem(AuthenticationProvider.AUTHENTICATION_KEY, this.state);
+                setItem(AUTHENTICATION_KEY, this.state);
               }
             );
           }
         });
     } else {
-      const stored = getItem(AuthenticationProvider.AUTHENTICATION_KEY);
+      const stored = getItem(AUTHENTICATION_KEY);
       if (stored.token) {
         this.setState({
           ...stored,

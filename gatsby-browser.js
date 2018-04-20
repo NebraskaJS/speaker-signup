@@ -1,14 +1,16 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
+import { onClientEntry } from 'gatsby-plugin-emotion/gatsby-browser';
 
-import { client } from './src/client';
+import { ApolloAuthenticationProvider } from './src/client';
+
+exports.onClientEntry = onClientEntry;
 
 exports.replaceRouterComponent = function({ history }) {
   const App = ({ children }) => (
-    <ApolloProvider client={client}>
+    <ApolloAuthenticationProvider>
       <Router history={history}>{children}</Router>
-    </ApolloProvider>
+    </ApolloAuthenticationProvider>
   );
 
   return App;

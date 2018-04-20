@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
 
-import { Authentication } from '..';
+import { ReactionMutation } from '..';
 import { Trigger } from './Trigger';
 import { Emoji } from '..';
 
@@ -11,9 +11,9 @@ const Container = styled.div({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  minHeight: 60,
-  padding: '0.25rem 0',
-  border: '1px solid #EEE',
+  minHeight: 42,
+  padding: 0,
+  border: '1px solid #e1e4e8',
   borderLeftWidth: 0,
   borderRightWidth: 0,
   marginTop: 'auto',
@@ -38,30 +38,20 @@ const Reactions = ({ list, onReaction }) => (
   </ReactionContainer>
 );
 
-export function Reaction({ children, list }) {
+export function Reaction({ children, list, subjectId }) {
   return (
-    <Authentication>
-      {({ authenticate, authenticated, token }) => (
+    <ReactionMutation
+      subjectId={subjectId}
+      message="Adding a reaction requires logging in. Log in?"
+      type="add"
+    >
+      {addReaction => (
         <Container>
           {children}
           <Tooltip
             position="bottom"
             trigger="click"
-            html={
-              <Reactions
-                list={list}
-                onReaction={reaction => {
-                  if (!authenticated) {
-                    const shouldAuthenticate = confirm(
-                      'Adding a reaction requires logging in. Log in?'
-                    );
-                    if (shouldAuthenticate) {
-                      authenticate();
-                    }
-                  }
-                }}
-              />
-            }
+            html={<Reactions list={list} onReaction={addReaction} />}
             animation="scale"
             duration={150}
             theme="light"
@@ -73,7 +63,7 @@ export function Reaction({ children, list }) {
           </Tooltip>
         </Container>
       )}
-    </Authentication>
+    </ReactionMutation>
   );
 }
 

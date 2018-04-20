@@ -1,8 +1,12 @@
 import React from 'react';
 import styled from 'react-emotion';
+import { Query } from 'react-apollo';
 import GatsbyLink from 'gatsby-link';
+import gql from 'graphql-tag';
 
 import { Block, Issue } from '..';
+import { idx } from '../../util';
+import { ISSUES_QUERY } from '../../graphql';
 
 const Grid = styled.div`
   display: grid;
@@ -23,54 +27,72 @@ const Link = styled(GatsbyLink)`
   padding: 0.5rem 0;
 `;
 
-export function Issues({ list, title = 'Open proposals' }) {
+const merge = (updated, list) => {
+  const lookup = list.reduce((lookupTable, { node }, index) => {
+    lookupTable[node.id] = index;
+    return lookupTable;
+  }, {});
+
+  return updated.reduce((merged, { node, ...rest }) => {
+    const clone = {
+      ...rest,
+      node: {
+        ...node,
+        fields: {
+          slug: `/proposal/${encodeURIComponent(node.id)}`,
+        },
+      },
+    };
+    const index = typeof lookup[node.id] === 'number' ? lookup[node.id] : -1;
+    if (index > -1) {
+      merged[index] = clone;
+    } else {
+      merged.push(clone);
+    }
+    return merged;
+  }, list.slice(0));
+};
+
+export function Issues({
+  list = [],
+  owner,
+  name,
+  title = 'Open proposals',
+  state = 'OPEN',
+}) {
+  const { pageInfo = {} } = list[0].node || {};
   return (
-    <Block
-      title={title}
-      children={() => (
-        <React.Fragment>
-          <Grid>
-            {list.map(({ node }) => <Issue key={node.id} {...node} />)}
-          </Grid>
-          {title.indexOf('Open') > -1 ? (
-            <Link to="/closed">Check out closed proposals</Link>
-          ) : (
-            <Link to="/">Check out open proposals</Link>
-          )}
-        </React.Fragment>
+    <Query query={gql(ISSUES_QUERY)} variables={{ owner, name, state }}>
+      {({ data }) => (
+        <Block
+          title={title}
+          children={() => {
+            const merged = merge(
+              idx(data, _ => data.repository.issues.edges, []),
+              list
+            );
+            return (
+              <React.Fragment>
+                <Grid>
+                  {merged.map(({ node }) => (
+                    <Issue key={node.id} state={state} {...node} />
+                  ))}
+                </Grid>
+                {title.indexOf('Open') > -1 ? (
+                  <Link to="/closed">Check out closed proposals</Link>
+                ) : (
+                  <Link to="/">Check out open proposals</Link>
+                )}
+              </React.Fragment>
+            );
+          }}
+        />
       )}
-    />
+    </Query>
   );
 }
 
-// export function Issues() {
-//   return (
-//     <Query
-//       query={gql`
-//         query {
-//           repository(owner: "nebraskajs", name: "speaker-signup") {
-//             issues(last: 20, states: OPEN) {
-//               edges {
-//                 node {
-//                   ...IssueFragment
-//                 }
-//               }
-//             }
-//           }
-//         }
-//         ${Issue.fragments.issue}
-//       `}
-//       children={({ loading, error, data }) => {
-//         if (loading) {
-//           return <p>Loading...</p>;
-//         } else if (error) {
-//           return <p>An error!</p>;
-//         }
-
-//         return data.repository.issues.edges.map(({ node: issue }) => (
-//           <Issue key={issue.id} {...issue} />
-//         ));
-//       }}
-//     />
-//   );
-// }
+Issues.defaultProps = {
+  owner: 'nebraskajs',
+  name: 'speaker-signup',
+};

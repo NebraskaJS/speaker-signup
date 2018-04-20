@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import Helmet from 'react-helmet';
+import fetch from 'isomorphic-fetch';
 import autosize from 'autosize';
 
 import { Authentication, Block } from '../components';
@@ -78,6 +79,13 @@ const StyledBlock = styled(Block)`
 `;
 
 export default class NewProposal extends Component {
+  state = {
+    body: '',
+    error: false,
+    status: '',
+    title: '',
+  };
+
   componentDidMount() {
     autosize(this.textarea);
   }
@@ -86,21 +94,96 @@ export default class NewProposal extends Component {
     autosize.destroy(this.textarea);
   }
 
+  handleChange = ev => {
+    const name = ev.target.getAttribute('name');
+    this.setState({
+      [name]: ev.target.value,
+    });
+  };
+
   handleSubmit = ({ authenticate, authenticated, token }) => {
     return ev => {
       ev.preventDefault();
-      if (!authenticated) {
-        const shouldAuthenticate = confirm(
-          `You need to authenticate for that. Sound good?`
-        );
-        if (shouldAuthenticate) {
-          authenticate();
-        }
+      if (authenticated) {
+        const { body, title } = this.state;
+        this.setState({
+          status: 'loading',
+        });
+        const result = fetch(
+          `https://api.github.com/repos/dschau/website/issues`,
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/vnd.github.v3+json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              body,
+              labels: ['speaker-signup webapp'],
+              title,
+            }),
+          }
+        )
+          .then(response => {
+            return response.json().then(json => {
+              if (!response.ok) {
+                throw json.message;
+              }
+              return json;
+            });
+          })
+          .then(() => {
+            this.setState(
+              {
+                body: '',
+                status: 'submitted',
+                title: '',
+              },
+              this.handleTimeout()
+            );
+          })
+          .catch(err => {
+            this.setState(
+              {
+                status: 'error',
+                error: err,
+              },
+              this.handleTimeout(5000)
+            );
+          });
+      }
+      const shouldAuthenticate = confirm(
+        `You need to authenticate for that. Sound good?`
+      );
+      if (shouldAuthenticate) {
+        authenticate();
       }
     };
   };
 
+  handleTimeout = () => {
+    return (duration = 2500) => {
+      setTimeout(() => {
+        this.setState({
+          status: '',
+        });
+      }, duration);
+    };
+  };
+
+  getButtonMessage = status => {
+    switch (status) {
+      case 'submitted':
+        return 'Got it. Thanks!';
+      case 'error':
+        return 'Uh-oh. Looks like something went wrong!';
+      default:
+        return 'Send it';
+    }
+  };
+
   render() {
+    const { error, status } = this.state;
     return (
       <Authentication>
         {auth => (
@@ -124,14 +207,19 @@ export default class NewProposal extends Component {
                       id="title"
                       placeholder="Title"
                       required
+                      value={this.state.title}
+                      onChange={this.handleChange}
                     />
                   </Label>
-                  <Label for="comment">
+                  <Label for="body">
                     <Textarea
-                      id="comment"
+                      name="body"
+                      id="body"
                       placeholder="Leave a comment"
                       innerRef={node => (this.textarea = node)}
                       required
+                      value={this.state.body}
+                      onChange={this.handleChange}
                     />
                     <small
                       css={{
@@ -144,7 +232,7 @@ export default class NewProposal extends Component {
                       Note: markdown is supported
                     </small>
                   </Label>
-                  <Button>Send it</Button>
+                  <Button>{this.getButtonMessage(status)}</Button>
                 </Form>
               )}
             />

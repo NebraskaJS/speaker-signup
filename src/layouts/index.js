@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import { AuthenticationProvider, Header } from '../components';
+import { Header, UserProvider } from '../components';
 import '../style/global';
 import 'normalize.css';
 
@@ -9,7 +9,7 @@ export default function IndexLayout({ children, data }) {
   const { meta } = data;
   const { description, keywords, title } = meta;
   return (
-    <div>
+    <UserProvider>
       <Helmet
         title="Proposals"
         titleTemplate={`%s | ${title}`}
@@ -30,9 +30,9 @@ export default function IndexLayout({ children, data }) {
           paddingTop: 0,
         }}
       >
-        <AuthenticationProvider>{children()}</AuthenticationProvider>
+        {children()}
       </div>
-    </div>
+    </UserProvider>
   );
 }
 

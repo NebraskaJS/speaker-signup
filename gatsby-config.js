@@ -7,7 +7,6 @@ module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-react-next',
-    'gatsby-plugin-emotion',
     'gatsby-plugin-sharp',
     {
       resolve: 'gatsby-source-filesystem',
@@ -25,7 +24,7 @@ module.exports = {
     'gatsby-transformer-sharp',
     'gatsby-transformer-yaml',
     {
-      resolve: '@dschau/gatsby-source-github',
+      resolve: 'gatsby-source-github',
       options: {
         headers: {
           Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -33,7 +32,10 @@ module.exports = {
         queries: [
           `{
             repository(owner: "nebraskajs", name: "speaker-signup") {
-              issues(last: 50) {
+              issues(last: 50, orderBy:{ field:CREATED_AT, direction:DESC }) {
+                pageInfo {
+                  endCursor
+                }
                 edges {
                   node {
                     id
@@ -51,6 +53,10 @@ module.exports = {
                       edges {
                         node {
                           content
+                          id
+                          user {
+                            login
+                          }
                         }
                       }
                     }

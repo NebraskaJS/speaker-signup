@@ -9,10 +9,7 @@ export default function IndexPage({ data }) {
 
 export const indexQuery = graphql`
   query IndexPageQuery {
-    proposals: allGithubIssues(
-      sort: { fields: [createdAt], order: DESC }
-      filter: { state: { ne: "CLOSED" } }
-    ) {
+    proposals: allGithubIssues(filter: { state: { ne: "CLOSED" } }) {
       edges {
         node {
           ...IssueFragment

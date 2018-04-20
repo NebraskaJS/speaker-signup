@@ -4,6 +4,7 @@ import Link from 'gatsby-link';
 
 import { AddNew } from './add-new';
 import { Logo } from './logo';
+import { User, UserProfile } from '..';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -16,6 +17,7 @@ const HeaderContainer = styled.header`
 export const Header = () => (
   <HeaderContainer>
     <Logo children={({ Title }) => <Title>NEJS Proposals</Title>} />
+    <User>{UserProfile}</User>
     <AddNew />
   </HeaderContainer>
 );
