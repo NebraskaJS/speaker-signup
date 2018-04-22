@@ -71,6 +71,7 @@ export const issueFragment = graphql`
     title
     url
     createdAt
+    state
     reactions {
       edges {
         node {

@@ -26,13 +26,11 @@ const Link = styled(GatsbyLink)`
 
 export function Issues({
   list = [],
-  owner,
-  name,
   title = 'Open proposals',
   state = 'OPEN',
 }) {
   return (
-    <IssuesConsumer>
+    <IssuesConsumer state={state}>
       {({ data }) => (
         <Block
           title={title}
@@ -58,8 +56,3 @@ export function Issues({
     </IssuesConsumer>
   );
 }
-
-Issues.defaultProps = {
-  owner: 'nebraskajs',
-  name: 'speaker-signup',
-};

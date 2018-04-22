@@ -6,11 +6,11 @@ import '../style/global';
 import 'normalize.css';
 
 export default function IndexLayout({ children, data }) {
-  const { meta } = data;
+  const { meta, proposals } = data;
   const { description, keywords, title } = meta;
   return (
     <UserProvider>
-      <IssuesProvider>
+      <IssuesProvider initial={proposals.edges}>
         <Helmet
           title="Proposals"
           titleTemplate={`%s | ${title}`}
@@ -44,6 +44,14 @@ export const indexQuery = graphql`
       description
       keywords
       title
+    }
+
+    proposals: allGithubIssues {
+      edges {
+        node {
+          ...IssueFragment
+        }
+      }
     }
   }
 `;

@@ -28,35 +28,30 @@ const merge = (data, list) => {
 
   const issues = idx(data, _ => data.repository.issues.edges, []);
 
-  if (issues.length > 0) {
-    return Object.assign({}, data, {
-      repository: {
-        issues: {
-          edges: issues.reduce((merged, issue) => {
-            const { node, ...rest } = issue;
-            const clone = extendNode(issue);
-            const index =
-              typeof lookup[node.id] === 'number' ? lookup[node.id] : -1;
-            if (index > -1) {
-              merged[index] = clone;
-            } else {
-              merged.push(clone);
-            }
-            return merged;
-          }, list.slice(0)),
-        },
+  return Object.assign({}, data, {
+    repository: {
+      issues: {
+        edges: issues.reduce((merged, issue) => {
+          const { node, ...rest } = issue;
+          const clone = extendNode(issue);
+          const index =
+            typeof lookup[node.id] === 'number' ? lookup[node.id] : -1;
+          if (index > -1) {
+            merged[index] = clone;
+          } else {
+            merged.push(clone);
+          }
+          return merged;
+        }, list.slice(0)),
       },
-    });
-  }
-
-  return data;
+    },
+  });
 };
 
 export class IssuesProvider extends Component {
   static defaultProps = {
-    name: 'nebraskajs',
-    owner: 'speaker-signup',
-    state: 'OPEN',
+    name: process.env.REPO_NAME,
+    owner: process.env.REPO_OWNER,
   };
 
   state = {
@@ -75,7 +70,6 @@ export class IssuesProvider extends Component {
       const index = issues.findIndex(({ node }) => slugify(node.id) === id);
 
       if (index > -1) {
-        console.log(extendNode(issues[index]).node);
         return extendNode(issues[index]).node;
       }
 
@@ -84,13 +78,16 @@ export class IssuesProvider extends Component {
   }
 
   render() {
-    const { children, owner, name, state } = this.props;
+    const { children, owner, name, initial } = this.props;
     return (
-      <Query query={gql(ISSUES_QUERY)} variables={{ owner, name, state }}>
+      <Query query={gql(ISSUES_QUERY)} variables={{ owner, name }}>
         {({ data }) => {
           return (
             <IssuesContext.Provider
-              value={{ data: merge(data, []), getIssue: this.getIssue(data) }}
+              value={{
+                data: merge(data, initial),
+                getIssue: this.getIssue(data),
+              }}
             >
               {children}
             </IssuesContext.Provider>
@@ -101,4 +98,26 @@ export class IssuesProvider extends Component {
   }
 }
 
-export const IssuesConsumer = IssuesContext.Consumer;
+export function IssuesConsumer({ children, state = 'OPEN' }) {
+  const filterByState = (data, stateType) => {
+    const issues = idx(data, _ => data.repository.issues.edges, []).filter(
+      ({ node }) => node.state === stateType
+    );
+
+    return Object.assign(data, {
+      repository: {
+        issues: {
+          edges: issues,
+        },
+      },
+    });
+  };
+
+  return (
+    <IssuesContext.Consumer>
+      {({ data, ...rest }) => {
+        return children({ data: filterByState(data, state), ...rest });
+      }}
+    </IssuesContext.Consumer>
+  );
+}

@@ -1,7 +1,7 @@
 export const ISSUES_QUERY = `
-  query getNewIssues($owner: String!, $name: String!, $state: IssueState!) {
+  query getAllIssues($owner: String!, $name: String!) {
     repository(owner: $owner, name: $name) {
-      issues(last: 50, states: [$state], orderBy:{ field:CREATED_AT, direction:DESC }) {
+      issues(last: 50, orderBy:{ field:CREATED_AT, direction:DESC }) {
         edges {
           node {
             id
