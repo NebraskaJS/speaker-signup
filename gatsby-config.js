@@ -6,6 +6,8 @@ require('dotenv').config({
   ),
 });
 
+console.log(process.env.REPO_OWNER, process.env.REPO_NAME);
+
 module.exports = {
   siteMetadata: {
     title: 'Speaker Signup',
@@ -14,6 +16,7 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-react-next',
     'gatsby-plugin-sharp',
+    'gatsby-plugin-catch-links',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
