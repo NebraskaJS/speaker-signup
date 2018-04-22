@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'react-emotion';
 import GatsbyLink from 'gatsby-link';
 
@@ -37,7 +37,7 @@ export function Issues({
           children={() => {
             const issues = idx(data, _ => data.repository.issues.edges, []);
             return (
-              <React.Fragment>
+              <Fragment>
                 <Grid>
                   {issues.map(({ node }) => (
                     <Issue key={node.id} state={state} {...node} />
@@ -48,7 +48,7 @@ export function Issues({
                 ) : (
                   <Link to="/">Check out open proposals</Link>
                 )}
-              </React.Fragment>
+              </Fragment>
             );
           }}
         />
