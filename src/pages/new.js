@@ -10,6 +10,7 @@ import { getItem, setItem } from '../util';
 const Form = styled.form`
   padding: 1rem;
   margin: 0;
+  overflow: hidden;
 `;
 
 const Label = styled.label`
@@ -75,7 +76,7 @@ Button.defaultProps = {
 const StyledBlock = styled(Block)`
   ::before {
     left: auto;
-    right: -13%;
+    right: -8%;
   }
 `;
 

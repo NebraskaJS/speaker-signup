@@ -25,24 +25,22 @@ const ImageContainer = styled.div({
 });
 
 const Image = styled.img({
-  maxWidth: 80,
-  borderRadius: 80,
-  margin: '0.5rem',
+  maxWidth: 28,
+  margin: '0.25rem',
 });
 
-export function UserProfile({ avatarUrl, login, name }) {
+export function UserProfile({ avatarUrl, className, login, name }) {
   if (!name) {
     return null;
   }
 
   return (
-    <Container>
+    <Container className={className}>
       <Logout>
         <ImageContainer>
           <Image src={avatarUrl} />
         </ImageContainer>
       </Logout>
-      {name}
     </Container>
   );
 }

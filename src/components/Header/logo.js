@@ -8,6 +8,8 @@ const Container = styled.div`
   border: 3px solid black;
   border-radius: 3px;
   padding: 0.5rem;
+  margin: 0.25rem 0;
+  width: 100%;
   transition: background-color 75ms ease-in-out;
   :hover {
     background-color: white;
@@ -36,7 +38,12 @@ export function Logo({ children, to = '/', ...rest }) {
     <Link
       to={to}
       activeClassName="active"
-      css={{ textDecoration: 'none', color: 'inherit' }}
+      css={{
+        textDecoration: 'none',
+        color: 'inherit',
+        width: '100%',
+        '@media only screen and (min-width: 768px)': { width: 'auto' },
+      }}
     >
       <Container {...rest}>{children({ Title })}</Container>
     </Link>

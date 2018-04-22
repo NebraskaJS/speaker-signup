@@ -1,6 +1,9 @@
 const path = require('path');
 require('dotenv').config({
-  path: path.join(process.cwd(), `.env.${process.env.NODE_ENV}`),
+  path: path.join(
+    process.cwd(),
+    process.env.NODE_ENV === 'production' ? `.env.production` : '.env'
+  ),
 });
 
 module.exports = {
