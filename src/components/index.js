@@ -4,6 +4,7 @@ export * from './Emoji';
 export * from './Header';
 export * from './Issue';
 export * from './Issues';
+export * from './IssuesProvider';
 export * from './Reaction';
 export * from './ReactionMutation';
 export * from './UserProfile';
