@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 import autosize from 'autosize';
 
 import { Authentication, Block } from '../components';
+import { getItem, setItem } from '../util';
 
 const Form = styled.form`
   padding: 1rem;
@@ -78,6 +79,8 @@ const StyledBlock = styled(Block)`
   }
 `;
 
+const PERSISTED_COMMENT_KEY = '__SPEAKER_SIGNUP_PROPOSAL__';
+
 export default class NewProposal extends Component {
   state = {
     body: '',
@@ -88,6 +91,12 @@ export default class NewProposal extends Component {
 
   componentDidMount() {
     autosize(this.textarea);
+
+    const persistedSubmission = getItem(PERSISTED_COMMENT_KEY);
+
+    if (Object.keys(persistedSubmission).length > 0) {
+      this.setState(persistedSubmission);
+    }
   }
 
   componentWillUnmount() {
@@ -104,26 +113,27 @@ export default class NewProposal extends Component {
   handleSubmit = ({ authenticate, authenticated, token }) => {
     return ev => {
       ev.preventDefault();
+      const { body, title } = this.state;
+      setItem(PERSISTED_COMMENT_KEY, {
+        body,
+        title,
+      });
       if (authenticated) {
-        const { body, title } = this.state;
         this.setState({
           status: 'loading',
         });
-        const result = fetch(
-          `https://api.github.com/repos/dschau/website/issues`,
-          {
-            method: 'POST',
-            headers: {
-              Accept: 'application/vnd.github.v3+json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              body,
-              labels: ['speaker-signup webapp'],
-              title,
-            }),
-          }
-        )
+        return fetch(`https://api.github.com/repos/dschau/website/issues`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/vnd.github.v3+json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            body,
+            labels: ['speaker-signup webapp'],
+            title,
+          }),
+        })
           .then(response => {
             return response.json().then(json => {
               if (!response.ok) {
@@ -139,7 +149,10 @@ export default class NewProposal extends Component {
                 status: 'submitted',
                 title: '',
               },
-              this.handleTimeout()
+              () => {
+                setItem(PERSISTED_COMMENT_KEY, {});
+                this.handleTimeout();
+              }
             );
           })
           .catch(err => {
@@ -152,6 +165,7 @@ export default class NewProposal extends Component {
             );
           });
       }
+
       const shouldAuthenticate = confirm(
         `You need to authenticate for that. Sound good?`
       );

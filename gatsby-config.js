@@ -1,4 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({
+  path: path.join(process.cwd(), `.env.${process.env.NODE_ENV}`),
+});
 
 module.exports = {
   siteMetadata: {
@@ -30,8 +33,9 @@ module.exports = {
           Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
         },
         queries: [
-          `{
-            repository(owner: "nebraskajs", name: "speaker-signup") {
+          [
+            `query getIssues($owner: String!, $name: String!) {
+            repository(owner: $owner, name: $name) {
               issues(last: 50, orderBy:{ field:CREATED_AT, direction:DESC }) {
                 pageInfo {
                   endCursor
@@ -65,6 +69,8 @@ module.exports = {
               }
             }
           }`,
+            { owner: process.env.REPO_OWNER, name: process.env.REPO_NAME },
+          ],
         ],
       },
     },
