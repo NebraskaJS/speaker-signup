@@ -6,8 +6,6 @@ require('dotenv').config({
   ),
 });
 
-console.log(process.env.REPO_OWNER, process.env.REPO_NAME);
-
 module.exports = {
   siteMetadata: {
     title: 'Speaker Signup',

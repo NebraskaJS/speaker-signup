@@ -28,6 +28,16 @@ const merge = (data, list) => {
 
   const issues = idx(data, _ => data.repository.issues.edges, []);
 
+  if (issues.length === 0) {
+    return Object.assign({}, data, {
+      repository: {
+        issues: {
+          edges: list,
+        },
+      },
+    });
+  }
+
   return Object.assign({}, data, {
     repository: {
       issues: {

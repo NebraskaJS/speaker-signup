@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'react-emotion';
 import Helmet from 'react-helmet';
+import { ApolloConsumer } from 'react-apollo';
 import fetch from 'isomorphic-fetch';
 import autosize from 'autosize';
 
@@ -111,7 +112,7 @@ export default class NewProposal extends Component {
     });
   };
 
-  handleSubmit = ({ authenticate, authenticated, token }) => {
+  handleSubmit = ({ authenticate, authenticated, token }, client) => {
     return ev => {
       ev.preventDefault();
       const { body, title } = this.state;
@@ -151,6 +152,7 @@ export default class NewProposal extends Component {
                 title: '',
               },
               () => {
+                client.resetStore();
                 setItem(PERSISTED_COMMENT_KEY, {});
                 this.handleTimeout();
               }
@@ -202,56 +204,63 @@ export default class NewProposal extends Component {
     return (
       <Authentication>
         {auth => (
-          <React.Fragment>
-            <Helmet
-              title="Add a proposal"
-              meta={[
-                {
-                  name: 'description',
-                  content: `NebraskaJS needs speakers! Use this form to submit a proposal and hopefully everyone will hear your excellent talk soon.`,
-                },
-              ]}
-            />
-            <StyledBlock
-              title="Add a proposal"
-              children={() => (
-                <Form name="add-proposal" onSubmit={this.handleSubmit(auth)}>
-                  <Label for="title">
-                    <Input
-                      name="title"
-                      id="title"
-                      placeholder="Title"
-                      required
-                      value={this.state.title}
-                      onChange={this.handleChange}
-                    />
-                  </Label>
-                  <Label for="body">
-                    <Textarea
-                      name="body"
-                      id="body"
-                      placeholder="Leave a comment"
-                      innerRef={node => (this.textarea = node)}
-                      required
-                      value={this.state.body}
-                      onChange={this.handleChange}
-                    />
-                    <small
-                      css={{
-                        color: '#aaa',
-                        display: 'block',
-                        fontFamily: 'sans-serif',
-                        padding: '0.25rem 0',
-                      }}
+          <ApolloConsumer>
+            {client => (
+              <React.Fragment>
+                <Helmet
+                  title="Add a proposal"
+                  meta={[
+                    {
+                      name: 'description',
+                      content: `NebraskaJS needs speakers! Use this form to submit a proposal and hopefully everyone will hear your excellent talk soon.`,
+                    },
+                  ]}
+                />
+                <StyledBlock
+                  title="Add a proposal"
+                  children={() => (
+                    <Form
+                      name="add-proposal"
+                      onSubmit={this.handleSubmit(auth, client)}
                     >
-                      Note: markdown is supported
-                    </small>
-                  </Label>
-                  <Button>{this.getButtonMessage(status)}</Button>
-                </Form>
-              )}
-            />
-          </React.Fragment>
+                      <Label for="title">
+                        <Input
+                          name="title"
+                          id="title"
+                          placeholder="Title"
+                          required
+                          value={this.state.title}
+                          onChange={this.handleChange}
+                        />
+                      </Label>
+                      <Label for="body">
+                        <Textarea
+                          name="body"
+                          id="body"
+                          placeholder="Leave a comment"
+                          innerRef={node => (this.textarea = node)}
+                          required
+                          value={this.state.body}
+                          onChange={this.handleChange}
+                        />
+                        <small
+                          css={{
+                            color: '#aaa',
+                            display: 'block',
+                            fontFamily: 'sans-serif',
+                            padding: '0.25rem 0',
+                          }}
+                        >
+                          Note: markdown is supported
+                        </small>
+                      </Label>
+                      <Button>{this.getButtonMessage(status)}</Button>
+                    </Form>
+                  )}
+                />
+              </React.Fragment>
+            )}
+          </ApolloConsumer>
         )}
       </Authentication>
     );
