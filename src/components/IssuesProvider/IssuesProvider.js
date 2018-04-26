@@ -41,18 +41,7 @@ const merge = (data, list) => {
   return Object.assign({}, data, {
     repository: {
       issues: {
-        edges: issues.reduce((merged, issue) => {
-          const { node, ...rest } = issue;
-          const clone = extendNode(issue);
-          const index =
-            typeof lookup[node.id] === 'number' ? lookup[node.id] : -1;
-          if (index > -1) {
-            merged[index] = clone;
-          } else {
-            merged.push(clone);
-          }
-          return merged;
-        }, list.slice(0)),
+        edges: issues.map(issue => extendNode(issue)),
       },
     },
   });
